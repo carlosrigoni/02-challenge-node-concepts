@@ -1,7 +1,7 @@
 const express = require("express");
 const cors = require("cors");
 
-const { uuid, isUuid } = require("uuidv4");
+const { uuid } = require("uuidv4");
 
 const app = express();
 
@@ -24,7 +24,8 @@ app.post("/repositories", (request, response) => {
     title,
     url,
     techs,
-    likes: 0 }
+    likes: 0,
+   }
 
   repositories.push(repository)
 
@@ -38,17 +39,15 @@ app.put("/repositories/:id", (request, response) => {
   const repositoryIndex = repositories.findIndex(repository => repository.id === id)
   
   if (repositoryIndex < 0) {
-    return response.status(400).json({ error: "Project not found" })
+    return response.status(400).json({ error: "Repository does not exists." })
   }
-
-  const likes = repositories[repositoryIndex].likes
 
   const repository = {
     id,
     url,
     title,
     techs,
-    likes
+    likes: repositories[repositoryIndex].likes
   }
 
   repositories[repositoryIndex] = repository;
@@ -78,7 +77,7 @@ app.post("/repositories/:id/like", (request, response) => {
   const repositoryIndex = repositories.findIndex(repository => repository.id === id)
 
   if (repositoryIndex < 0) {
-    return response.status(400).json({ error: 'Repository not found'})
+    return response.status(400).json({ error: 'Repository does not exists.'})
   }
 
   const repository = repositories[repositoryIndex]
